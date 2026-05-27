@@ -4,18 +4,18 @@
 
 QAce Bug Lab is a small web application created as a QA portfolio project.
 
-The goal is not to build a complex system, but to create a simple and testable environment where different QA activities can be demonstrated, documented and improved over time.
+The main goal is not to build a complex software product, but to create a simple, visual and testable environment where different Quality Assurance activities can be demonstrated, documented and improved over time.
 
-The application will simulate a small bug/insect management system, where users can register, list, edit and delete bugs.
+The application will simulate a bug/insect management system, where users can register, list, edit, delete and analyze different types of bugs.
 
-## 2. Main Goal
+## 2. Project Goal
 
-To demonstrate practical QA skills through a complete testing workflow, including:
+The goal of this project is to demonstrate practical QA skills through a complete testing workflow, including:
 
 - manual testing
 - exploratory testing
-- test cases
-- bug reports
+- test case design
+- bug reporting
 - regression testing
 - usability testing
 - API testing
@@ -33,7 +33,7 @@ The first version will include:
 - edit bug/insect form
 - delete bug/insect action
 - bug/insect detail page
-- basic filtering by status or severity
+- basic filtering by status, severity or priority
 
 ## 4. Bug/Insect Data Model
 
@@ -54,20 +54,15 @@ The first version will be frontend-only.
 
 Initial stack:
 
-- HTML
+- Vue 3
+- Vite
 - CSS
-- JavaScript
 - LocalStorage
 - GitHub Pages
 
-Future improvements may include:
+The application architecture will remain intentionally simple in order to prioritize QA activities and testing workflows instead of complex software engineering patterns.
 
-- JSON Server
-- Postman API tests
-- Cypress or Playwright automation
-- CI/CD basics
-
-## 6. QA Documentation
+## 6. QA Documentation Structure
 
 The project will include documentation in the following folders:
 
@@ -77,6 +72,22 @@ The project will include documentation in the following folders:
 - screenshots
 - docs
 
-## 7. Project Vision
+## 7. Future Improvements
 
-QAce Bug Lab is intended to become a complete QA learning and portfolio environment, showing not only the final result, but also the testing process, reasoning and evidence behind each QA activity.
+Future versions may include:
+
+- JSON Server
+- Postman API testing
+- Cypress or Playwright automation
+- basic CI/CD
+- video evidence using ScreenPal
+- usability testing reports
+- regression test suites
+
+## 8. Project Vision
+
+QAce Bug Lab is intended to become a complete QA learning and portfolio environment.
+
+The project will show not only the final application, but also the testing process, QA reasoning, documentation, evidence and continuous improvement behind each activity.
+
+The project is also intended to demonstrate frontend testing possibilities using modern JavaScript tooling and future automation frameworks.
