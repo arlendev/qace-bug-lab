@@ -1,19 +1,34 @@
+<script setup>
+import { bugs } from "./data/bugs";
+</script>
+
 <template>
   <div class="container">
-    <h1>🐞 QAce Bug Lab</h1>
+    <header>
+      <div class="logo">🐞</div>
 
-    <p class="subtitle">Catch, classify and manage software bugs.</p>
+      <h1>QAce Bug Lab</h1>
 
-    <div class="welcome-card">
-      <h2>Welcome to QAce Bug Lab</h2>
+      <p>Catch, classify and manage software bugs.</p>
+    </header>
 
-      <p>Discover, classify and manage software bugs.</p>
+    <main>
+      <h2>Bug Dashboard</h2>
 
-      <p>
-        A QA portfolio project focused on testing, quality assurance and
-        continuous improvement.
-      </p>
-    </div>
+      <div class="cards-grid">
+        <div class="bug-card" v-for="bug in bugs" :key="bug.id">
+          <div class="bug-icon">{{ bug.emoji }}</div>
+
+          <h3>{{ bug.name }}</h3>
+
+          <p class="severity">{{ bug.severity }}</p>
+
+          <p>{{ bug.description }}</p>
+
+          <button>View Details</button>
+        </div>
+      </div>
+    </main>
   </div>
 </template>
 
@@ -25,24 +40,70 @@ body {
 }
 
 .container {
-  max-width: 1000px;
-  margin: 60px auto;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+header {
   text-align: center;
+  margin-bottom: 50px;
+}
+
+.logo {
+  font-size: 3rem;
+  margin-bottom: 15px;
 }
 
 h1 {
   font-size: 3rem;
+  margin: 0 0 20px 0;
 }
 
-.subtitle {
+header p {
+  margin-top: 0;
   color: #666;
-  margin-bottom: 30px;
 }
 
-.welcome-card {
+main h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.cards-grid {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.bug-card {
+  width: 280px;
   background: white;
-  padding: 30px;
   border-radius: 12px;
+  padding: 30px 20px 24px;
+  text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.bug-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.bug-card h3 {
+  margin: 0 0 20px 0;
+  color: #555;
+}
+
+.severity {
+  font-weight: bold;
+  color: #c62828;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
 }
 </style>
