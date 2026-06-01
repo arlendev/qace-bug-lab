@@ -21,7 +21,11 @@ import { bugs } from "./data/bugs";
 
           <h3>{{ bug.name }}</h3>
 
-          <p class="severity">{{ bug.severity }}</p>
+          <div class="badges">
+            <span class="badge severity">{{ bug.severity }}</span>
+            <span class="badge priority">{{ bug.priority }}</span>
+            <span class="badge status">{{ bug.status }}</span>
+          </div>
 
           <p>{{ bug.description }}</p>
 
@@ -105,5 +109,35 @@ button {
   margin-top: 10px;
   padding: 8px 16px;
   cursor: pointer;
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.severity {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.priority {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.status {
+  background: #e3f2fd;
+  color: #1565c0;
 }
 </style>
