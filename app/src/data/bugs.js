@@ -93,5 +93,17 @@ export const bugs = [
   image: "",
   description: "Causes communication failures between systems.",
   emoji: "🐛"
+},
+
+{
+  id: 9,
+  name: "Data Worm",
+  family: "Worm",
+  severity: "High",
+  priority: "Medium",
+  status: "Open",
+  image: "",
+  description: "Corrupts or displays incorrect data.",
+  emoji: "🪱"
 }
 ];
