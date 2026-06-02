@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { bugs } from "./data/bugs";
+import qaceLogo from "./assets/qace-logo.png";
 
 const selectedBug = ref(null);
 
@@ -16,9 +17,9 @@ function closeDetails() {
 <template>
   <div class="container">
     <header>
-      <div class="logo">🐞</div>
-      <h1>QAce Bug Lab</h1>
-      <p>Catch, classify and manage software bugs.</p>
+      <img class="brand-logo" :src="qaceLogo" alt="QAce logo" />
+
+      <p class="tagline">Catch, classify and manage software bugs.</p>
     </header>
 
     <main>
@@ -35,7 +36,8 @@ function closeDetails() {
             <span class="badge status">{{ bug.status }}</span>
           </div>
 
-          <p>{{ bug.description }}</p>
+          <p class="bug-description">{{ bug.description }}</p>
+
           <button @click="viewDetails(bug)">View Details</button>
         </div>
       </div>
@@ -76,19 +78,17 @@ header {
   margin-bottom: 50px;
 }
 
-.logo {
-  font-size: 3rem;
-  margin-bottom: 15px;
+.brand-logo {
+  max-width: 280px;
+  width: 70%;
+  height: auto;
+  margin-bottom: 12px;
 }
 
-h1 {
-  font-size: 3rem;
-  margin: 0 0 20px 0;
-}
-
-header p {
+.tagline {
   margin-top: 0;
   color: #666;
+  font-size: 1.1rem;
 }
 
 main h2 {
@@ -120,6 +120,10 @@ main h2 {
 .bug-card h3 {
   margin: 0 0 20px 0;
   color: #555;
+}
+
+.bug-description {
+  min-height: 80px;
 }
 
 button {
