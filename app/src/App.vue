@@ -3,7 +3,15 @@ import { ref } from "vue";
 import { bugs } from "./data/bugs";
 import qaceLogo from "./assets/qace-logo.png";
 
+const currentScreen = ref("intro");
 const selectedBug = ref(null);
+const email = ref("");
+const password = ref("");
+const loginError = ref("");
+
+function goToLogin() {
+  currentScreen.value = "login";
+}
 
 function viewDetails(bug) {
   selectedBug.value = bug;
@@ -11,6 +19,33 @@ function viewDetails(bug) {
 
 function closeDetails() {
   selectedBug.value = null;
+}
+
+function enterLab() {
+  currentScreen.value = "login";
+}
+
+function login() {
+  if (!email.value || !password.value) {
+    loginError.value = "Please enter email and password.";
+    return;
+  }
+
+  if (email.value !== "qa@qace.com" || password.value !== "123456") {
+    loginError.value = "Invalid email or password.";
+    return;
+  }
+
+  loginError.value = "";
+  currentScreen.value = "dashboard";
+}
+
+function logout() {
+  currentScreen.value = "login";
+
+  email.value = "";
+  password.value = "";
+  loginError.value = "";
 }
 </script>
 
@@ -22,8 +57,49 @@ function closeDetails() {
       <p class="tagline">Catch, classify and manage software bugs.</p>
     </header>
 
-    <main>
-      <h2>Bug Dashboard</h2>
+    <section v-if="currentScreen === 'intro'" class="intro-screen">
+      <h2>Welcome to QAce Bug Lab</h2>
+
+      <p>Discover, classify and manage software bugs.</p>
+
+      <p>
+        A QA portfolio project focused on testing, quality assurance and
+        continuous improvement.
+      </p>
+
+      <button @click="enterLab">Enter Bug Lab</button>
+    </section>
+
+    <section v-if="currentScreen === 'login'" class="login-screen">
+      <h2>Login</h2>
+
+      <p>Access the QAce Bug Lab environment.</p>
+
+      <div class="demo-credentials">
+        <strong>Demo Credentials</strong>
+
+        <p>Email: qa@qace.com</p>
+
+        <p>Password: 123456</p>
+      </div>
+
+      <input v-model="email" type="email" placeholder="Email" />
+
+      <input v-model="password" type="password" placeholder="Password" />
+
+      <p v-if="loginError" class="error-message">
+        {{ loginError }}
+      </p>
+
+      <button @click="login">Login</button>
+    </section>
+
+    <main v-if="currentScreen === 'dashboard'">
+      <div class="dashboard-header">
+        <h2>Bug Dashboard</h2>
+
+        <button @click="logout" class="logout-button">Logout</button>
+      </div>
 
       <div class="cards-grid">
         <div class="bug-card" v-for="bug in bugs" :key="bug.id">
@@ -202,5 +278,65 @@ button {
   background: transparent;
   font-size: 2rem;
   cursor: pointer;
+}
+
+.login-screen {
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 32px;
+  background: white;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.login-screen input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 12px 0;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.login-screen button {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.error-message {
+  color: #c62828;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.dashboard-header {
+  position: relative;
+  width: 90%;
+  max-width: 1120px;
+  margin: 0 auto 30px auto;
+  text-align: center;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+}
+
+.logout-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: #b71c1c;
 }
 </style>
