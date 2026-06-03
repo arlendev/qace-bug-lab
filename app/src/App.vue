@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { bugs } from "./data/bugs";
 import qaceLogo from "./assets/qace-logo.png";
 
@@ -8,6 +8,15 @@ const selectedBug = ref(null);
 const email = ref("");
 const password = ref("");
 const loginError = ref("");
+const selectedSeverity = ref("All");
+
+const filteredBugs = computed(() => {
+  if (selectedSeverity.value === "All") {
+    return bugs;
+  }
+
+  return bugs.filter((bug) => bug.severity === selectedSeverity.value);
+});
 
 function goToLogin() {
   currentScreen.value = "login";
@@ -101,8 +110,45 @@ function logout() {
         <button @click="logout" class="logout-button">Logout</button>
       </div>
 
+      <div class="filter-bar">
+        <button
+          :class="{ active: selectedSeverity === 'All' }"
+          @click="selectedSeverity = 'All'"
+        >
+          All
+        </button>
+
+        <button
+          :class="{ active: selectedSeverity === 'Critical' }"
+          @click="selectedSeverity = 'Critical'"
+        >
+          Critical
+        </button>
+
+        <button
+          :class="{ active: selectedSeverity === 'High' }"
+          @click="selectedSeverity = 'High'"
+        >
+          High
+        </button>
+
+        <button
+          :class="{ active: selectedSeverity === 'Medium' }"
+          @click="selectedSeverity = 'Medium'"
+        >
+          Medium
+        </button>
+
+        <button
+          :class="{ active: selectedSeverity === 'Low' }"
+          @click="selectedSeverity = 'Low'"
+        >
+          Low
+        </button>
+      </div>
+
       <div class="cards-grid">
-        <div class="bug-card" v-for="bug in bugs" :key="bug.id">
+        <div class="bug-card" v-for="bug in filteredBugs" :key="bug.id">
           <div class="bug-icon">{{ bug.emoji }}</div>
           <h3>{{ bug.name }}</h3>
 
@@ -338,5 +384,28 @@ button {
 
 .logout-button:hover {
   background: #b71c1c;
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.filter-bar button {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  background: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.filter-bar button.active {
+  background: #f4c542;
+  color: #1f2933;
 }
 </style>
