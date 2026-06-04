@@ -68,7 +68,48 @@ Review during responsive design improvements.
 
 ## Future Features
 
-No items registered yet.
+### LAB-001 - Bug Simulation Mode
+
+**Description:**
+
+Introduce a training mode that allows users to intentionally activate predefined application defects.
+
+The objective is to create a realistic QA learning environment where testers can identify, reproduce, document and validate software bugs.
+
+**Proposed Functionality:**
+
+Users may enable one or more simulated defects through a dedicated interface.
+
+Examples:
+
+- Disable required field validation
+- Return incorrect filter results
+- Display inconsistent bug details
+- Simulate save operation failures
+- Introduce UI inconsistencies
+- Generate incorrect status updates
+
+**Expected Benefits:**
+
+- QA practice environment
+- Bug reporting exercises
+- Test case execution training
+- Regression testing scenarios
+- Educational demonstrations
+
+**Status:**
+
+Future Vision
+
+**Priority:**
+
+Low
+
+**Notes:**
+
+This feature is intentionally planned for a future phase of the project.
+
+Current focus remains on building a stable and fully tested CRUD application before introducing simulated defects and training scenarios.
 
 ---
 
