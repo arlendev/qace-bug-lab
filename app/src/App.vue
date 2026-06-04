@@ -40,7 +40,7 @@ function login() {
     return;
   }
 
-  if (email.value !== "qa@qace.com" || password.value !== "123456") {
+  if (email.value !== "qa@qace.dev" || password.value !== "123456") {
     loginError.value = "Invalid email or password.";
     return;
   }
@@ -87,7 +87,7 @@ function logout() {
       <div class="demo-credentials">
         <strong>Demo Credentials</strong>
 
-        <p>Email: qa@qace.com</p>
+        <p>Email: qa@qace.dev</p>
 
         <p>Password: 123456</p>
       </div>
