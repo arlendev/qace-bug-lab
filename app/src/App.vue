@@ -169,7 +169,7 @@ function logout() {
           <button class="close-button" @click="closeDetails">×</button>
 
           <div class="modal-icon">{{ selectedBug.emoji }}</div>
-          <h2>{{ selectedBug.name }}</h2>
+          <h2 class="modal-title">{{ selectedBug.name }}</h2>
 
           <p><strong>Family:</strong> {{ selectedBug.family }}</p>
           <p><strong>Severity:</strong> {{ selectedBug.severity }}</p>
@@ -407,5 +407,25 @@ button {
 .filter-bar button.active {
   background: #f4c542;
   color: #1f2933;
+}
+
+.filter-bar button {
+  color: #111827;
+}
+
+.modal {
+  color: #1f2933;
+}
+
+.modal-title {
+  color: #111827;
+  font-weight: 700;
+  opacity: 1;
+}
+
+.modal p,
+.modal strong {
+  color: #4b5563;
+  opacity: 1;
 }
 </style>
