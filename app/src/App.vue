@@ -341,8 +341,17 @@ button {
   right: 16px;
   border: none;
   background: transparent;
+  color: #111827;
   font-size: 2rem;
+  font-weight: bold;
+  line-height: 1;
   cursor: pointer;
+  opacity: 1;
+  z-index: 10;
+}
+
+.close-button:hover {
+  color: #c62828;
 }
 
 .login-screen {
