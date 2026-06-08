@@ -9,13 +9,23 @@ const email = ref("");
 const password = ref("");
 const loginError = ref("");
 const selectedSeverity = ref("All");
+const searchTerm = ref("");
 
 const filteredBugs = computed(() => {
-  if (selectedSeverity.value === "All") {
-    return bugs;
-  }
+  const search = searchTerm.value.toLowerCase().trim();
 
-  return bugs.filter((bug) => bug.severity === selectedSeverity.value);
+  return bugs.filter((bug) => {
+    const matchesSeverity =
+      selectedSeverity.value === "All" ||
+      bug.severity === selectedSeverity.value;
+
+    const matchesSearch =
+      bug.name.toLowerCase().includes(search) ||
+      bug.family.toLowerCase().includes(search) ||
+      bug.description.toLowerCase().includes(search);
+
+    return matchesSeverity && matchesSearch;
+  });
 });
 
 function goToLogin() {
@@ -110,6 +120,10 @@ function logout() {
         <button @click="logout" class="logout-button">Logout</button>
       </div>
 
+      <div class="search-bar">
+        <input v-model="searchTerm" type="text" placeholder="Search bugs..." />
+      </div>
+
       <div class="filter-bar">
         <button
           :class="{ active: selectedSeverity === 'All' }"
@@ -147,7 +161,12 @@ function logout() {
         </button>
       </div>
 
-      <div class="cards-grid">
+      <div v-if="filteredBugs.length === 0" class="empty-state">
+        <h3>No bugs found</h3>
+        <p>Try another search term or change the severity filter.</p>
+      </div>
+
+      <div v-else class="cards-grid">
         <div class="bug-card" v-for="bug in filteredBugs" :key="bug.id">
           <div class="bug-icon">{{ bug.emoji }}</div>
           <h3>{{ bug.name }}</h3>
@@ -427,5 +446,42 @@ button {
 .modal strong {
   color: #4b5563;
   opacity: 1;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 40px;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.empty-state h3 {
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.empty-state p {
+  color: #777;
 }
 </style>
