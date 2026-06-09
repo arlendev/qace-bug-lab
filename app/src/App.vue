@@ -10,11 +10,12 @@ const password = ref("");
 const loginError = ref("");
 const selectedSeverity = ref("All");
 const searchTerm = ref("");
+const bugList = ref([...bugs]);
 
 const filteredBugs = computed(() => {
   const search = searchTerm.value.toLowerCase().trim();
 
-  return bugs.filter((bug) => {
+  return bugList.value.filter((bug) => {
     const matchesSeverity =
       selectedSeverity.value === "All" ||
       bug.severity === selectedSeverity.value;
@@ -114,8 +115,8 @@ function logout() {
     </section>
 
     <main v-if="currentScreen === 'dashboard'">
-      <div class="dashboard-header">
-        <h2>Bug Dashboard</h2>
+      <div class="dashboard-actions">
+        <button class="add-bug-button">+ Add Bug</button>
 
         <button @click="logout" class="logout-button">Logout</button>
       </div>
@@ -385,22 +386,25 @@ button {
 }
 
 .dashboard-header {
-  position: relative;
   width: 90%;
   max-width: 1120px;
-  margin: 0 auto 30px auto;
+  margin: 0 auto 24px auto;
   text-align: center;
 }
 
 .dashboard-header h2 {
-  margin: 0;
+  margin: 0 0 16px 0;
+}
+
+.dashboard-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
 }
 
 .logout-button {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
   background: #c62828;
   color: white;
   border: none;
@@ -408,6 +412,20 @@ button {
   padding: 10px 18px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.add-bug-button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-bug-button:hover {
+  background: #1b5e20;
 }
 
 .logout-button:hover {
@@ -427,6 +445,7 @@ button {
   border-radius: 999px;
   padding: 8px 16px;
   background: white;
+  color: #111827;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -435,10 +454,6 @@ button {
 .filter-bar button.active {
   background: #f4c542;
   color: #1f2933;
-}
-
-.filter-bar button {
-  color: #111827;
 }
 
 .modal {
