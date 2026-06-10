@@ -12,6 +12,7 @@ const newBugSeverity = ref("Critical");
 const newBugPriority = ref("High");
 const newBugDescription = ref("");
 const createBugError = ref("");
+const createBugSuccess = ref("");
 const email = ref("");
 const password = ref("");
 const loginError = ref("");
@@ -89,6 +90,12 @@ function saveBug() {
   };
 
   bugList.value.push(newBug);
+
+  createBugSuccess.value = "Bug created successfully.";
+
+  setTimeout(() => {
+    createBugSuccess.value = "";
+  }, 4000);
 
   newBugName.value = "";
   newBugFamily.value = "";
@@ -180,6 +187,10 @@ function logout() {
 
         <button @click="logout" class="logout-button">Logout</button>
       </div>
+
+      <p v-if="createBugSuccess" class="success-message">
+        {{ createBugSuccess }}
+      </p>
 
       <div class="search-bar">
         <input v-model="searchTerm" type="text" placeholder="Search bugs..." />
@@ -643,5 +654,12 @@ button {
 
 .modal .error-message {
   color: #c62828;
+}
+
+.success-message {
+  text-align: center;
+  color: #2e7d32;
+  font-weight: bold;
+  margin-bottom: 16px;
 }
 </style>
