@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { bugs } from "./data/bugs";
 import qaceLogo from "./assets/qace-logo.png";
 
@@ -18,7 +18,17 @@ const password = ref("");
 const loginError = ref("");
 const selectedSeverity = ref("All");
 const searchTerm = ref("");
-const bugList = ref([...bugs]);
+const savedBugs = localStorage.getItem("qace-bugs");
+
+const bugList = ref(savedBugs ? JSON.parse(savedBugs) : [...bugs]);
+
+watch(
+  bugList,
+  (newBugList) => {
+    localStorage.setItem("qace-bugs", JSON.stringify(newBugList));
+  },
+  { deep: true },
+);
 
 const filteredBugs = computed(() => {
   const search = searchTerm.value.toLowerCase().trim();
