@@ -6,6 +6,7 @@ import qaceLogo from "./assets/qace-logo.png";
 const currentScreen = ref("intro");
 const selectedBug = ref(null);
 const showCreateModal = ref(false);
+const isEditingBug = ref(false);
 const newBugName = ref("");
 const newBugFamily = ref("");
 const newBugSeverity = ref("Critical");
@@ -320,6 +321,10 @@ function logout() {
           <p><strong>Priority:</strong> {{ selectedBug.priority }}</p>
           <p><strong>Status:</strong> {{ selectedBug.status }}</p>
           <p><strong>Description:</strong> {{ selectedBug.description }}</p>
+
+          <button class="edit-bug-button" @click="isEditingBug = true">
+            Edit Bug
+          </button>
         </div>
       </div>
     </main>
@@ -327,6 +332,7 @@ function logout() {
 </template>
 
 <style>
+/* Base */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -339,6 +345,7 @@ body {
   padding: 20px;
 }
 
+/* Header */
 header {
   text-align: center;
   margin-bottom: 50px;
@@ -357,11 +364,160 @@ header {
   font-size: 1.1rem;
 }
 
-main h2 {
-  text-align: center;
+/* Dashboard Actions */
+.dashboard-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
+/* Buttons */
+button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.add-bug-button,
+.save-bug-button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-bug-button {
+  padding: 10px 18px;
+}
+
+.save-bug-button {
+  padding: 12px;
+}
+
+.add-bug-button:hover,
+.save-bug-button:hover {
+  background: #1b5e20;
+}
+
+.edit-bug-button {
+  background: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.edit-bug-button:hover {
+  background: #0d47a1;
+}
+
+.logout-button {
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: #b71c1c;
+}
+
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  color: #111827;
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 1;
+  z-index: 10;
+}
+
+.close-button:hover {
+  color: #c62828;
+}
+
+/* Login */
+.login-screen {
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 32px;
+  background: white;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.login-screen input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 12px 0;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.login-screen button {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* Search */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Filters */
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.filter-bar button {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  background: white;
+  color: #111827;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.filter-bar button.active {
+  background: #f4c542;
+  color: #1f2933;
+}
+
+/* Cards */
 .cards-grid {
   display: flex;
   justify-content: center;
@@ -392,12 +548,7 @@ main h2 {
   min-height: 80px;
 }
 
-button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
+/* Badges */
 .badges {
   display: flex;
   justify-content: center;
@@ -428,6 +579,7 @@ button {
   color: #1565c0;
 }
 
+/* Modals */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -445,6 +597,7 @@ button {
   width: 90%;
   max-width: 500px;
   background: white;
+  color: #1f2933;
   border-radius: 16px;
   padding: 40px 32px 32px;
   text-align: center;
@@ -460,130 +613,6 @@ button {
   margin: 0 0 24px 0;
 }
 
-.close-button {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  border: none;
-  background: transparent;
-  color: #111827;
-  font-size: 2rem;
-  font-weight: bold;
-  line-height: 1;
-  cursor: pointer;
-  opacity: 1;
-  z-index: 10;
-}
-
-.close-button:hover {
-  color: #c62828;
-}
-
-.login-screen {
-  max-width: 420px;
-  margin: 40px auto;
-  padding: 32px;
-  background: white;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.login-screen input {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 12px 0;
-  padding: 10px;
-  font-size: 1rem;
-}
-
-.login-screen button {
-  width: 100%;
-  margin-top: 16px;
-}
-
-.error-message {
-  color: #c62828;
-  font-weight: bold;
-  margin-top: 12px;
-}
-
-.dashboard-header {
-  width: 90%;
-  max-width: 1120px;
-  margin: 0 auto 24px auto;
-  text-align: center;
-}
-
-.dashboard-header h2 {
-  margin: 0 0 16px 0;
-}
-
-.dashboard-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-
-.logout-button {
-  background: #c62828;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 18px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.add-bug-button {
-  background: #2e7d32;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 18px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.add-bug-button:hover {
-  background: #1b5e20;
-}
-
-.logout-button:hover {
-  background: #b71c1c;
-}
-
-.filter-bar {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
-}
-
-.filter-bar button {
-  border: none;
-  border-radius: 999px;
-  padding: 8px 16px;
-  background: white;
-  color: #111827;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.filter-bar button.active {
-  background: #f4c542;
-  color: #1f2933;
-}
-
-.modal {
-  color: #1f2933;
-}
-
 .modal-title {
   color: #111827;
   font-weight: 700;
@@ -596,22 +625,23 @@ button {
   opacity: 1;
 }
 
-.search-bar {
+/* Create Bug Form */
+.create-bug-form {
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.search-bar input {
-  width: 100%;
-  max-width: 420px;
-  padding: 12px 16px;
-  border: none;
-  border-radius: 999px;
+.create-bug-form input,
+.create-bug-form select,
+.create-bug-form textarea {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+/* States */
 .empty-state {
   text-align: center;
   margin-top: 40px;
@@ -633,33 +663,10 @@ button {
   color: #777;
 }
 
-.create-bug-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.create-bug-form input,
-.create-bug-form select,
-.create-bug-form textarea {
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.save-bug-button {
-  background: #2e7d32;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px;
+.error-message {
+  color: #c62828;
   font-weight: bold;
-  cursor: pointer;
-}
-
-.save-bug-button:hover {
-  background: #1b5e20;
+  margin-top: 12px;
 }
 
 .modal .error-message {
