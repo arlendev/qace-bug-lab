@@ -5,6 +5,13 @@ import qaceLogo from "./assets/qace-logo.png";
 
 const currentScreen = ref("intro");
 const selectedBug = ref(null);
+const showCreateModal = ref(false);
+const newBugName = ref("");
+const newBugFamily = ref("");
+const newBugSeverity = ref("Critical");
+const newBugPriority = ref("High");
+const newBugDescription = ref("");
+const createBugError = ref("");
 const email = ref("");
 const password = ref("");
 const loginError = ref("");
@@ -39,6 +46,57 @@ function viewDetails(bug) {
 
 function closeDetails() {
   selectedBug.value = null;
+}
+
+function openCreateModal() {
+  showCreateModal.value = true;
+}
+
+function closeCreateModal() {
+  showCreateModal.value = false;
+}
+
+function saveBug() {
+  if (
+    !newBugName.value.trim() ||
+    !newBugFamily.value.trim() ||
+    !newBugDescription.value.trim()
+  ) {
+    createBugError.value = "Please fill in all required fields.";
+    return;
+  }
+
+  createBugError.value = "";
+
+  const bugAlreadyExists = bugList.value.some(
+    (bug) => bug.name.toLowerCase() === newBugName.value.trim().toLowerCase(),
+  );
+
+  if (bugAlreadyExists) {
+    createBugError.value = "A bug with this name already exists.";
+    return;
+  }
+
+  const newBug = {
+    id: Date.now(),
+    emoji: "🕸️",
+    name: newBugName.value.trim(),
+    family: newBugFamily.value.trim(),
+    severity: newBugSeverity.value,
+    priority: newBugPriority.value,
+    status: "Open",
+    description: newBugDescription.value.trim(),
+  };
+
+  bugList.value.push(newBug);
+
+  newBugName.value = "";
+  newBugFamily.value = "";
+  newBugSeverity.value = "Critical";
+  newBugPriority.value = "High";
+  newBugDescription.value = "";
+
+  closeCreateModal();
 }
 
 function enterLab() {
@@ -116,7 +174,9 @@ function logout() {
 
     <main v-if="currentScreen === 'dashboard'">
       <div class="dashboard-actions">
-        <button class="add-bug-button">+ Add Bug</button>
+        <button class="add-bug-button" @click="openCreateModal">
+          + Add Bug
+        </button>
 
         <button @click="logout" class="logout-button">Logout</button>
       </div>
@@ -181,6 +241,49 @@ function logout() {
           <p class="bug-description">{{ bug.description }}</p>
 
           <button @click="viewDetails(bug)">View Details</button>
+        </div>
+      </div>
+
+      <div v-if="showCreateModal" class="modal-overlay">
+        <div class="modal">
+          <button class="close-button" @click="closeCreateModal">×</button>
+
+          <h2 class="modal-title">Create New Bug</h2>
+
+          <div class="create-bug-form">
+            <input v-model="newBugName" type="text" placeholder="Bug Name" />
+
+            <input
+              v-model="newBugFamily"
+              type="text"
+              placeholder="Bug Family"
+            />
+
+            <select v-model="newBugSeverity">
+              <option>Critical</option>
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+
+            <select v-model="newBugPriority">
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+
+            <textarea
+              v-model="newBugDescription"
+              rows="4"
+              placeholder="Bug Description"
+            ></textarea>
+
+            <p v-if="createBugError" class="error-message">
+              {{ createBugError }}
+            </p>
+
+            <button class="save-bug-button" @click="saveBug">Save Bug</button>
+          </div>
         </div>
       </div>
 
@@ -507,5 +610,38 @@ button {
 
 .empty-state p {
   color: #777;
+}
+
+.create-bug-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create-bug-form input,
+.create-bug-form select,
+.create-bug-form textarea {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.save-bug-button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.save-bug-button:hover {
+  background: #1b5e20;
+}
+
+.modal .error-message {
+  color: #c62828;
 }
 </style>
