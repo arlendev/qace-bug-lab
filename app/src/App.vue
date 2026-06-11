@@ -725,8 +725,11 @@ button {
   height: 100%;
   background: rgba(0, 0, 0, 0.45);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  overflow-y: auto;
+  padding: 24px 0;
+  box-sizing: border-box;
 }
 
 .modal {
