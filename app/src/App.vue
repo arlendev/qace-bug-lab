@@ -7,6 +7,12 @@ const currentScreen = ref("intro");
 const selectedBug = ref(null);
 const showCreateModal = ref(false);
 const isEditingBug = ref(false);
+const editBugName = ref("");
+const editBugFamily = ref("");
+const editBugSeverity = ref("");
+const editBugPriority = ref("");
+const editBugStatus = ref("");
+const editBugDescription = ref("");
 const newBugName = ref("");
 const newBugFamily = ref("");
 const newBugSeverity = ref("Critical");
@@ -14,6 +20,7 @@ const newBugPriority = ref("High");
 const newBugDescription = ref("");
 const createBugError = ref("");
 const createBugSuccess = ref("");
+const editBugSuccess = ref("");
 const email = ref("");
 const password = ref("");
 const loginError = ref("");
@@ -58,6 +65,7 @@ function viewDetails(bug) {
 
 function closeDetails() {
   selectedBug.value = null;
+  isEditingBug.value = false;
 }
 
 function openCreateModal() {
@@ -106,7 +114,7 @@ function saveBug() {
 
   setTimeout(() => {
     createBugSuccess.value = "";
-  }, 4000);
+  }, 3000);
 
   newBugName.value = "";
   newBugFamily.value = "";
@@ -115,6 +123,37 @@ function saveBug() {
   newBugDescription.value = "";
 
   closeCreateModal();
+}
+
+function startEditBug() {
+  editBugName.value = selectedBug.value.name;
+  editBugFamily.value = selectedBug.value.family;
+  editBugSeverity.value = selectedBug.value.severity;
+  editBugPriority.value = selectedBug.value.priority;
+  editBugStatus.value = selectedBug.value.status;
+  editBugDescription.value = selectedBug.value.description;
+
+  isEditingBug.value = true;
+}
+
+function saveEditedBug() {
+  selectedBug.value.name = editBugName.value;
+  selectedBug.value.family = editBugFamily.value;
+  selectedBug.value.severity = editBugSeverity.value;
+  selectedBug.value.priority = editBugPriority.value;
+  selectedBug.value.status = editBugStatus.value;
+  selectedBug.value.description = editBugDescription.value;
+  editBugSuccess.value = "Bug updated successfully.";
+
+  setTimeout(() => {
+    editBugSuccess.value = "";
+  }, 3000);
+
+  isEditingBug.value = false;
+}
+
+function cancelEditBug() {
+  isEditingBug.value = false;
 }
 
 function enterLab() {
@@ -314,16 +353,99 @@ function logout() {
           <button class="close-button" @click="closeDetails">×</button>
 
           <div class="modal-icon">{{ selectedBug.emoji }}</div>
-          <h2 class="modal-title">{{ selectedBug.name }}</h2>
+          <h2 v-if="!isEditingBug" class="modal-title">
+            {{ selectedBug.name }}
+          </h2>
 
-          <p><strong>Family:</strong> {{ selectedBug.family }}</p>
-          <p><strong>Severity:</strong> {{ selectedBug.severity }}</p>
-          <p><strong>Priority:</strong> {{ selectedBug.priority }}</p>
-          <p><strong>Status:</strong> {{ selectedBug.status }}</p>
-          <p><strong>Description:</strong> {{ selectedBug.description }}</p>
+          <input v-else v-model="editBugName" class="edit-input" type="text" />
 
-          <button class="edit-bug-button" @click="isEditingBug = true">
+          <div v-if="!isEditingBug">
+            <p><strong>Family:</strong> {{ selectedBug.family }}</p>
+          </div>
+
+          <div v-else class="edit-field">
+            <label>Family</label>
+
+            <input v-model="editBugFamily" class="edit-input" type="text" />
+          </div>
+          <p v-if="!isEditingBug">
+            <strong>Severity:</strong> {{ selectedBug.severity }}
+          </p>
+
+          <div v-else class="edit-field">
+            <label>Severity</label>
+
+            <select v-model="editBugSeverity" class="edit-input">
+              <option>Critical</option>
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+          </div>
+          <div v-if="!isEditingBug">
+            <p><strong>Priority:</strong> {{ selectedBug.priority }}</p>
+          </div>
+
+          <div v-else class="edit-field">
+            <label>Priority</label>
+
+            <select v-model="editBugPriority" class="edit-input">
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+          </div>
+          <div v-if="!isEditingBug">
+            <p><strong>Status:</strong> {{ selectedBug.status }}</p>
+          </div>
+
+          <div v-else class="edit-field">
+            <label>Status</label>
+
+            <select v-model="editBugStatus" class="edit-input">
+              <option>Open</option>
+              <option>In Progress</option>
+              <option>Closed</option>
+            </select>
+          </div>
+          <div v-if="!isEditingBug">
+            <p><strong>Description:</strong> {{ selectedBug.description }}</p>
+          </div>
+
+          <div v-else class="edit-field">
+            <label>Description</label>
+
+            <textarea
+              v-model="editBugDescription"
+              class="edit-input"
+              rows="4"
+            ></textarea>
+          </div>
+
+          <p v-if="editBugSuccess" class="success-message">
+            {{ editBugSuccess }}
+          </p>
+
+          <button
+            v-if="!isEditingBug"
+            class="edit-bug-button"
+            @click="startEditBug"
+          >
             Edit Bug
+          </button>
+          <button
+            v-if="isEditingBug"
+            class="save-bug-button"
+            @click="saveEditedBug"
+          >
+            Save Changes
+          </button>
+          <button
+            v-if="isEditingBug"
+            class="cancel-edit-button"
+            @click="cancelEditBug"
+          >
+            Cancel
           </button>
         </div>
       </div>
@@ -415,6 +537,21 @@ button {
 
 .edit-bug-button:hover {
   background: #0d47a1;
+}
+
+.cancel-edit-button {
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.cancel-edit-button:hover {
+  background: #4b5563;
 }
 
 .logout-button {
@@ -625,6 +762,16 @@ button {
   opacity: 1;
 }
 
+.edit-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
 /* Create Bug Form */
 .create-bug-form {
   display: flex;
@@ -639,6 +786,28 @@ button {
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 1rem;
+}
+
+.edit-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.edit-field {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.edit-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #4b5563;
 }
 
 /* States */
@@ -673,10 +842,8 @@ button {
   color: #c62828;
 }
 
-.success-message {
-  text-align: center;
+.modal .success-message {
   color: #2e7d32;
   font-weight: bold;
-  margin-bottom: 16px;
 }
 </style>
