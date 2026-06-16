@@ -7,6 +7,7 @@ const currentScreen = ref("intro");
 const selectedBug = ref(null);
 const showCreateModal = ref(false);
 const isEditingBug = ref(false);
+const showDeleteConfirm = ref(false);
 const editBugName = ref("");
 const editBugFamily = ref("");
 const editBugSeverity = ref("");
@@ -19,8 +20,7 @@ const newBugSeverity = ref("Critical");
 const newBugPriority = ref("High");
 const newBugDescription = ref("");
 const createBugError = ref("");
-const createBugSuccess = ref("");
-const editBugSuccess = ref("");
+const toastMessage = ref("");
 const email = ref("");
 const password = ref("");
 const loginError = ref("");
@@ -29,6 +29,14 @@ const searchTerm = ref("");
 const savedBugs = localStorage.getItem("qace-bugs");
 
 const bugList = ref(savedBugs ? JSON.parse(savedBugs) : [...bugs]);
+
+function showToast(message) {
+  toastMessage.value = message;
+
+  setTimeout(() => {
+    toastMessage.value = "";
+  }, 3000);
+}
 
 watch(
   bugList,
@@ -110,11 +118,7 @@ function saveBug() {
 
   bugList.value.push(newBug);
 
-  createBugSuccess.value = "Bug created successfully.";
-
-  setTimeout(() => {
-    createBugSuccess.value = "";
-  }, 3000);
+  showToast("Bug created successfully.");
 
   newBugName.value = "";
   newBugFamily.value = "";
@@ -143,17 +147,31 @@ function saveEditedBug() {
   selectedBug.value.priority = editBugPriority.value;
   selectedBug.value.status = editBugStatus.value;
   selectedBug.value.description = editBugDescription.value;
-  editBugSuccess.value = "Bug updated successfully.";
-
-  setTimeout(() => {
-    editBugSuccess.value = "";
-  }, 3000);
+  showToast("Bug updated successfully.");
 
   isEditingBug.value = false;
 }
 
 function cancelEditBug() {
   isEditingBug.value = false;
+}
+
+function openDeleteConfirm() {
+  showDeleteConfirm.value = true;
+}
+
+function cancelDeleteBug() {
+  showDeleteConfirm.value = false;
+}
+
+function confirmDeleteBug() {
+  bugList.value = bugList.value.filter(
+    (bug) => bug.id !== selectedBug.value.id,
+  );
+
+  selectedBug.value = null;
+  showDeleteConfirm.value = false;
+  showToast("Bug deleted successfully.");
 }
 
 function enterLab() {
@@ -230,6 +248,10 @@ function logout() {
     </section>
 
     <main v-if="currentScreen === 'dashboard'">
+      <div v-if="toastMessage" class="toast">
+        {{ toastMessage }}
+      </div>
+
       <div class="dashboard-actions">
         <button class="add-bug-button" @click="openCreateModal">
           + Add Bug
@@ -237,10 +259,6 @@ function logout() {
 
         <button @click="logout" class="logout-button">Logout</button>
       </div>
-
-      <p v-if="createBugSuccess" class="success-message">
-        {{ createBugSuccess }}
-      </p>
 
       <div class="search-bar">
         <input v-model="searchTerm" type="text" placeholder="Search bugs..." />
@@ -422,16 +440,19 @@ function logout() {
             ></textarea>
           </div>
 
-          <p v-if="editBugSuccess" class="success-message">
-            {{ editBugSuccess }}
-          </p>
-
           <button
             v-if="!isEditingBug"
             class="edit-bug-button"
             @click="startEditBug"
           >
             Edit Bug
+          </button>
+          <button
+            v-if="!isEditingBug"
+            class="delete-bug-button"
+            @click="openDeleteConfirm"
+          >
+            Delete Bug
           </button>
           <button
             v-if="isEditingBug"
@@ -446,6 +467,26 @@ function logout() {
             @click="cancelEditBug"
           >
             Cancel
+          </button>
+        </div>
+      </div>
+
+      <div v-if="showDeleteConfirm" class="modal-overlay">
+        <div class="modal">
+          <h2>Delete Bug</h2>
+
+          <p>
+            Are you sure you want to delete
+            <strong>{{ selectedBug?.name }}</strong
+            >?
+          </p>
+
+          <button class="cancel-edit-button" @click="cancelDeleteBug">
+            Cancel
+          </button>
+
+          <button class="delete-bug-button" @click="confirmDeleteBug">
+            Delete
           </button>
         </div>
       </div>
@@ -537,6 +578,21 @@ button {
 
 .edit-bug-button:hover {
   background: #0d47a1;
+}
+
+.delete-bug-button {
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  margin-left: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.delete-bug-button:hover {
+  background: #b71c1c;
 }
 
 .cancel-edit-button {
@@ -848,5 +904,23 @@ button {
 .modal .success-message {
   color: #2e7d32;
   font-weight: bold;
+}
+
+.toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+
+  background: #2e7d32;
+  color: white;
+
+  padding: 14px 18px;
+  border-radius: 8px;
+
+  font-weight: bold;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  z-index: 9999;
 }
 </style>
