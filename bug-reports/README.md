@@ -1,16 +1,33 @@
 # Bug Reports
 
-This directory contains documented defects identified during testing activities.
+This directory contains sample defect reports created as part of the QAce Bug Lab project.
 
-Each bug report includes:
+The objective is to demonstrate how software defects can be identified, documented and communicated using a structured Quality Assurance approach.
 
-- Summary
+## Report Structure
+
+Each bug report may include:
+
+- Bug ID
+- Title
+- Severity
+- Priority
 - Environment
-- Reproduction Steps
+- Preconditions
+- Steps to Reproduce
 - Expected Result
 - Actual Result
-- Severity
-- Status
 - Evidence
+- Status
 
-At the current stage of the project, no official bug reports have been registered.
+## Current Reports
+
+Bug reports will be added as the project evolves.
+
+## QA Activities Demonstrated
+
+- Defect Identification
+- Defect Documentation
+- Defect Communication
+- Defect Validation
+- Root Cause Analysis
