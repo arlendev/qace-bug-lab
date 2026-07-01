@@ -4,19 +4,19 @@
 
 The bug creation form allows bug names containing only numeric values or special characters.
 
-Examples successfully accepted by the application:
+Examples successfully accepted by the application include:
 
 * `123456`
 * `@`
 * `!!!!!!!`
 
-This behavior allows the creation of bug records with non-descriptive names, reducing data quality and making bug identification more difficult.
+This behavior allows non-descriptive bug records to be created, reducing data quality and making bug identification more difficult.
 
 ---
 
 ## Severity
 
-Low
+Medium
 
 ---
 
@@ -28,10 +28,10 @@ Low
 
 ## Environment
 
-* Application: QAce Bug Lab
-* Version: Current Development Version
-* Browser: Google Chrome
-* Platform: Windows 11
+* **Application:** QAce Bug Lab
+* **Version:** Current Development Version
+* **Browser:** Google Chrome
+* **Platform:** Windows 11
 
 ---
 
@@ -39,7 +39,7 @@ Low
 
 * User is logged in.
 * User is on the dashboard.
-* User has access to the "Create Bug" form.
+* User has access to the **Create Bug** form.
 
 ---
 
@@ -47,24 +47,24 @@ Low
 
 ### Scenario 1 - Numeric Name
 
-1. Click on "+ Add Bug".
+1. Click **+ Add Bug**.
 2. Enter `123456` as the bug name.
 3. Complete all remaining required fields.
-4. Click on "Save Bug".
+4. Click **Save Bug**.
 
 ### Scenario 2 - Special Character Name
 
-1. Click on "+ Add Bug".
+1. Click **+ Add Bug**.
 2. Enter `@` as the bug name.
 3. Complete all remaining required fields.
-4. Click on "Save Bug".
+4. Click **Save Bug**.
 
 ### Scenario 3 - Multiple Special Characters
 
-1. Click on "+ Add Bug".
+1. Click **+ Add Bug**.
 2. Enter `!!!!!!!` as the bug name.
 3. Complete all remaining required fields.
-4. Click on "Save Bug".
+4. Click **Save Bug**.
 
 ---
 
@@ -72,9 +72,9 @@ Low
 
 The application should reject bug names that do not contain meaningful alphabetic characters.
 
-A validation message should be displayed informing the user that the bug name must contain descriptive text.
+A validation message should inform the user that the bug name must contain descriptive text.
 
-Examples that should be rejected:
+Examples that should be rejected include:
 
 * `123456`
 * `@`
@@ -86,7 +86,7 @@ Examples that should be rejected:
 
 The application accepts and saves bug names containing only numbers or special characters.
 
-The records are successfully created and displayed on the dashboard.
+The invalid record is successfully persisted and displayed on the dashboard.
 
 ---
 
@@ -95,17 +95,33 @@ The records are successfully created and displayed on the dashboard.
 * Reduces data quality.
 * Makes bug identification more difficult.
 * Allows non-descriptive records to be stored.
-* Can negatively affect future search and reporting activities.
+* May negatively affect future search, reporting and maintenance activities.
 
 ---
 
 ## Evidence
 
-The following values were successfully accepted during exploratory testing:
+### Screenshot 1 – Create Bug Form
 
-* `123456`
-* `@`
-* `!!!!!!!`
+The **Create Bug** form accepts a bug name containing only special characters without displaying any validation message.
+
+![Create Bug Form](../screenshots/bug-reports/bug-001/01-create-form.png)
+
+---
+
+### Screenshot 2 – Dashboard
+
+After saving, the invalid bug is successfully displayed on the dashboard.
+
+![Dashboard](../screenshots/bug-reports/bug-001/02-dashboard.png)
+
+---
+
+### Screenshot 3 – Bug Details
+
+The bug details modal confirms that the invalid bug name has been successfully persisted.
+
+![Bug Details](../screenshots/bug-reports/bug-001/03-details.png)
 
 ---
 
@@ -117,6 +133,12 @@ Open
 
 ## QA Notes
 
-This defect was identified during exploratory testing focused on input validation and edge case analysis of the bug creation form.
+This defect was identified during exploratory testing focused on input validation and edge-case analysis of the **Create Bug** workflow.
 
-The issue does not prevent normal application usage but may impact the overall quality and consistency of stored defect records.
+The issue does not prevent normal application usage; however, it compromises data quality by allowing records with non-descriptive names to be stored.
+
+The screenshots above demonstrate the complete defect lifecycle:
+
+* The invalid input is accepted.
+* The record is successfully created.
+* The invalid value is persisted by the application.
